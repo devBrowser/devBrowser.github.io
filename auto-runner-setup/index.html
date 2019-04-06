@@ -1,0 +1,293 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <title>Hello, world!</title>
+  </head>
+  <body>
+        <nav class="navbar navbar-expand-sm sticky-top text-center navbar-light" style = "margin-top: 0px;background-color: white">
+                <a class="navbar-brand" href="#" style="color:#840909;"><span style="color:red">dev</span>Browser</a>
+        
+                  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                </button>
+        
+                <!--<h1 class="text-center" style="color:#840909;"><span style="color:red">RED</span>irector</h1>-->
+        
+                  <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                    <ul class="navbar-nav mx-auto">
+                      <li class="nav-item active">
+                        <a class="nav-link">Config <span class="sr-only">(current)</span></a>
+                      </li>
+                      <li class="nav-item">
+                            <a class="nav-link" href="../index.html">Download</span></a>
+                          </li>
+                      <li class="nav-item d-md-none" style="display: none" id="SignOutMobileNav">
+                        <a class="nav-link" id="btnSignOutMobile">Sign Out</a>
+                      </li>
+                    </ul>
+                    </div>
+                    <div class="ml-auto d-none d-md-block">
+                         <form class="form-inline" onsubmit="return!1">
+        
+                            <button id="btnActiveLogin" class="btn btn-outline-secondary">Log In</button>
+        
+                            <button id="btnActiveSignUp" class="btn btn-outline-primary">Sign Up</button>
+        
+                            <button id="btnSignUpWithGoogle2" class="btn btn-outline-danger">Sign Up/In with <img src="https://d1ayxb9ooonjts.cloudfront.net/8bc625062aeffa94729b9336243bed9d.svg" alt="Google" width="20"></button>
+        
+                            <button id="btnSignOut" class="btn btn-outline-info" style = "display: none">SIGN OUT</button>
+                          </form>
+                    </div>
+        
+            </nav>
+
+            <div class="container" id="signInForm" style="margin-bottom: 10px; display: none; background-color: lightgrey; border-radius: 0 0 20px 20px;">
+                    <form class="form-inline justify-content-center" id="signInFormForm" onsubmit="return!1" style="padding-top: 50px;padding-bottom: 50px">
+          
+                      <input id="txtEmail" class="form-control" type="email" placeholder="Email">
+          
+                      <input id="txtPassword" class="form-control" type="password" placeholder="Password">
+          
+                      <button style="margin: 5px" id="btnLogin" class="btn btn-light">Log In</button>
+          
+                      <button style="margin-right: 5px" id="btnSignUp" class="btn btn-primary">Sign Up</button>
+          
+                      <button style="margin-right: 5px"id="btnSignUpWithGoogle" class="btn btn-danger">Sign Up/In with Google</button>
+          
+                    </form>
+                </div>
+
+                <div class="container" id="input" style="display:none;"> 
+                <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text" id="basic-addon1">URL</span>
+                        </div>
+                        <input id="url" type="text" class="form-control" placeholder="Put URL here" aria-label="Put URL here" aria-describedby="basic-addon1">
+                      </div>
+
+                      <textarea id="code" class="form-control" placeholder="Put code here"  aria-label="With textarea"></textarea>
+                      <br>
+                      <button type="button" class="btn btn-primary btn-lg btn-block" onclick="sub()">Update</button>
+                </div>
+
+                <div class="container" id="err"> 
+                    <br>
+                    <br>
+                    <br>
+                        <p class="text-center" style="font-size:10vw">Sign in to edit</p>
+                        </div>
+                
+                
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+
+    <script src="https://www.gstatic.com/firebasejs/5.9.3/firebase.js"></script>
+    <script>
+    // Initialize Firebase
+    var config = {
+        apiKey: "AIzaSyA1LfhrqA6d_aveg-FNOjeN_fSuXqxvzZ0",
+        authDomain: "auto-code-runner.firebaseapp.com",
+        databaseURL: "https://auto-code-runner.firebaseio.com",
+        projectId: "auto-code-runner",
+        storageBucket: "auto-code-runner.appspot.com",
+        messagingSenderId: "439724678346"
+    };
+    firebase.initializeApp(config);
+    </script>
+
+    <script>
+var txtEmail = document.getElementById("txtEmail");
+var txtPassword = document.getElementById("txtPassword");
+var btnLogin = document.getElementById("btnLogin");
+var btnSignUp = document.getElementById("btnSignUp");
+var btnSignUpWithGoogle = document.getElementById("btnSignUpWithGoogle");
+
+var btnActiveLogin = document.getElementById("btnActiveLogin");
+var btnActiveSignUp = document.getElementById("btnActiveSignUp");
+var btnSignUpWithGoogle2 = document.getElementById("btnSignUpWithGoogle2");
+var btnSignOut = document.getElementById("btnSignOut");
+
+var btnSignOutMobile = document.getElementById("btnSignOutMobile");
+var SignOutMobileNav = document.getElementById("SignOutMobileNav");
+
+var btnDash = document.getElementById("btnDash");
+
+var txtWebsite = document.getElementById("txtWebsite");
+var txtREDurl = document.getElementById("txtREDurl");
+var btnRegister = document.getElementById("btnRegister");
+
+var dashSignInReq = document.getElementById("dashSignInReq");
+
+
+        btnLogin.addEventListener("click", ()=>{
+            const email = txtEmail.value
+            const password = txtPassword.value
+            const promise = firebase.auth().signInWithEmailAndPassword(email, password);
+            promise.catch(pro=>{
+                console.log(pro.messsage),
+                $(document).ready(function() {
+                    $("#logFailedAlert").slideDown().delay("100").slideUp()
+                })
+            });
+    });
+
+    btnLogin.addEventListener("click", ()=>{
+    const email = txtEmail.value
+    const password = txtPassword.value
+    const promise = firebase.auth().signInWithEmailAndPassword(email, password);
+    promise.catch(pro=>{
+        console.log(pro.messsage),
+        $(document).ready(function() {
+            $("#logFailedAlert").slideDown().delay("100").slideUp()
+        })
+    });
+});
+
+var userID;
+btnSignUp.addEventListener("click", ()=>{
+    const email = txtEmail.value
+    const password = txtPassword.value
+    const promise = firebase.auth().createUserWithEmailAndPassword(email, password);
+    promise.catch(pro=>{
+        console.log(pro.messsage),
+        $(document).ready(function() {
+            $("#logFailedAlert").slideDown().delay("100").slideUp()
+        });
+    });
+});
+
+var provider = new firebase.auth.GoogleAuthProvider();
+btnSignUpWithGoogle.addEventListener("click", ()=>{
+    firebase.auth().signInWithRedirect(provider),
+    firebase.auth().getRedirectResult().then().catch(function(pro) {
+        console.log(pro),
+        $(document).ready(function() {
+            $("#logFailedAlert").slideDown().delay("100").slideUp()
+        })
+    })
+});
+
+btnSignUpWithGoogle2.addEventListener("click", ()=>{
+    firebase.auth().signInWithRedirect(provider),
+    firebase.auth().getRedirectResult().then().catch(function(pro) {
+        console.log(pro),
+        $(document).ready(function() {
+            $("#logFailedAlert").slideDown().delay("100").slideUp()
+        })
+    })
+});
+var signedIn = false;
+var userID = "";
+firebase.auth().onAuthStateChanged(function(user) {
+  if (user) {
+      userID = user.uid;
+      signedIn = true;
+      btnActiveLogin.style.display = "none";
+      btnActiveSignUp.style.display = "none";
+      btnSignUpWithGoogle2.style.display = "none";
+      SignOutMobileNav.style.display = "block";
+      btnSignOut.style.display = "block";
+      console.log(user);
+      $("#signInForm").slideUp();
+
+
+      var database = firebase.database();
+      document.getElementById("input").style.display = "block";
+
+      document.getElementById("err").style.display = "none";
+
+      
+  } else {
+      signedIn = false;
+      console.log("NOT SIGNED IN");
+      btnActiveLogin.style.display = "block";
+      btnActiveSignUp.style.display = "block";
+      btnSignUpWithGoogle2.style.display = "block";
+      btnSignOut.style.display = "none";
+      dashSignInReq.style.display = "block";
+      SignOutMobileNav.style.display = "none";
+      document.getElementById("input").style.display = "none";
+
+      document.getElementById("err").style.display = "block";
+  }
+});
+
+var signInFormForm = document.getElementById("signInFormForm");
+btnActiveLogin.addEventListener("click", ()=>{
+    if(btnLogin.style.display!="block"){
+        var pad = 50;
+        var loop = setInterval(function(){pad--;signInFormForm.style.paddingTop = pad+"px";}, 7);
+
+        $("#signInForm").slideUp(function(){
+            btnLogin.style.display = "block";
+            btnSignUp.style.display = "none";
+            btnSignUpWithGoogle.style.display = "none";
+            clearInterval(loop);
+            pad = 0;
+            var loop2 = setInterval(function(){pad++;signInFormForm.style.paddingTop = pad+"px";if(pad >= 50){clearInterval(loop2);}}, 10);
+            $("#signInForm").slideDown();
+        });
+    }else{
+        btnLogin.style.display = "block";
+        btnSignUp.style.display = "none";
+        btnSignUpWithGoogle.style.display = "none";
+        $("#signInForm").slideDown();
+    }
+
+});
+
+btnActiveSignUp.addEventListener("click", ()=>{
+    if(btnSignUp.style.display!="block"){
+        var pad = 50;
+        var loop = setInterval(function(){pad--;signInFormForm.style.paddingTop = pad+"px";}, 7);
+        $("signInFormForm").slideUp();
+        $("#signInForm").slideUp(function(){
+            btnSignUp.style.display = "block";
+            btnLogin.style.display = "none";
+            btnSignUpWithGoogle.style.display = "none";
+            clearInterval(loop);
+            pad = 0;
+            var loop2 = setInterval(function(){pad++;signInFormForm.style.paddingTop = pad+"px";if(pad >= 50){clearInterval(loop2);}}, 7);
+            $("#signInForm").slideDown();
+        });
+    }else{
+            btnSignUp.style.display = "block";
+            btnLogin.style.display = "none";
+            btnSignUpWithGoogle.style.display = "none";
+            $("#signInForm").slideDown();
+    }
+});
+
+
+
+btnSignOut.addEventListener("click", ()=>{
+    firebase.auth().signOut();  
+});
+
+btnSignOutMobile.addEventListener("click", ()=>{
+    firebase.auth().signOut();
+});
+
+function sub(){
+
+    firebase.database().ref(userID).update({
+        [document.getElementById("url").value]: document.getElementById("code").value,
+    });
+    //location.reload();
+}
+    
+    
+    </script>
+  </body>
+</html>
