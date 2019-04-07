@@ -280,11 +280,23 @@ btnSignOutMobile.addEventListener("click", ()=>{
 });
 
 function sub(){
+    var index;
+    firebase.database().ref(userID).once('value',function(snap){
+        if(snap.val())
+        index = Object.keys(snap.val()).length;
+        if(!index)
+            index = 0;
 
-    firebase.database().ref(userID).update({
-        [document.getElementById("url").value]: document.getElementById("code").value   ,
+        firebase.database().ref(userID).update({
+        [index]:{
+            code: document.getElementById("code").value ,
+            url: document.getElementById("url").value,
+        }
+        
     });
-    location.reload();
+    location.reload();  
+    })
+
 }
     
     
