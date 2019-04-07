@@ -287,7 +287,11 @@ function sub(){
         if(!index)
             index = 0;
 
-
+        for(var indexx in snap.val()){
+            if(snap.val()[indexx]["url"]==document.getElementById("url").value){
+                index = indexx;
+            }
+        }
         firebase.database().ref(userID).update({
         [index]:{
             code: document.getElementById("code").value ,
